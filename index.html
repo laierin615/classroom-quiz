@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>班級經營期中考複習🌱</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #4CAF50; --light-green: #A5D6A7; --dark-green: #2E7D32;
+  --yellow: #FFD54F; --orange: #FF8A65; --brown: #6D4C41;
+  --red: #EF5350; --cream: #FFFDE7; --bg: #E8F5E9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: linear-gradient(160deg, #c8e6c9 0%, #f9fbe7 100%);
+  min-height: 100vh; font-size: 18px; color: #333;
+}
+.screen { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
+.screen.active { display: block; }
+
+/* ── HOME ── */
+#home { text-align: center; padding-top: 30px; }
+.pikmin-wrap { margin: 10px auto 20px; }
+/* Pikmin SVG mascot */
+.pikmin-group { display: flex; justify-content: center; gap: 18px; margin-bottom: 10px; }
+.pikmin { display: inline-block; position: relative; }
+.pikmin-body { width: 54px; height: 60px; border-radius: 50% 50% 45% 45%; position: relative; }
+.pikmin-eyes { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+.pikmin-eye { width: 13px; height: 13px; background: white; border-radius: 50%; position: relative; }
+.pikmin-eye::after { content:''; position:absolute; width:7px;height:7px; background:#222; border-radius:50%; top:3px; left:3px; }
+.pikmin-feet { display: flex; justify-content: center; gap: 10px; margin-top: 3px; }
+.pikmin-foot { width: 14px; height: 10px; border-radius: 50%; }
+.pikmin-stem { width: 4px; height: 22px; background: #558B2F; margin: 0 auto; border-radius: 2px; }
+.pikmin-leaf { width: 20px; height: 14px; border-radius: 50% 50% 0 50%; transform: rotate(-30deg); margin: 0 auto -8px; }
+.pikmin-red .pikmin-body { background: #EF5350; }
+.pikmin-red .pikmin-foot { background: #EF5350; }
+.pikmin-red .pikmin-leaf { background: #81C784; }
+.pikmin-yellow .pikmin-body { background: #FFD54F; }
+.pikmin-yellow .pikmin-foot { background: #FFD54F; }
+.pikmin-yellow .pikmin-leaf { background: #AED581; }
+.pikmin-blue .pikmin-body { background: #64B5F6; }
+.pikmin-blue .pikmin-foot { background: #64B5F6; }
+.pikmin-blue .pikmin-leaf { background: #81C784; }
+
+h1.title {
+  font-size: 28px; font-weight: 900; color: var(--dark-green);
+  text-shadow: 2px 2px 0 #fff, 0 0 20px #c8e6c9;
+  margin-bottom: 6px; line-height: 1.3;
+}
+.subtitle { color: #558B2F; font-size: 16px; margin-bottom: 28px; }
+.btn {
+  display: block; width: 100%; padding: 18px 20px;
+  margin: 12px 0; border: none; border-radius: 20px;
+  font-size: 20px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: transform .15s, box-shadow .15s;
+  box-shadow: 0 5px 0 rgba(0,0,0,.15);
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,.15); }
+.btn-primary { background: linear-gradient(135deg, #66BB6A, #43A047); color: white; }
+.btn-wrong  { background: linear-gradient(135deg, #EF5350, #E53935); color: white; }
+.btn-search { background: linear-gradient(135deg, #FFB300, #FF8F00); color: white; }
+.btn-back   { background: #eee; color: #555; font-size: 17px; padding: 12px; margin-top: 10px; box-shadow: none; }
+.btn-sm     { padding: 12px 16px; font-size: 17px; }
+
+/* ── GROUP SELECT ── */
+#group-select h2 { text-align:center; color: var(--dark-green); margin: 10px 0 20px; font-size:22px; }
+.group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.group-card {
+  background: white; border-radius: 16px; padding: 16px 12px;
+  text-align: center; cursor: pointer; border: 3px solid transparent;
+  transition: all .2s; box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  font-size: 15px; font-weight: 700; color: var(--dark-green);
+}
+.group-card:hover, .group-card.all { border-color: var(--green); background: #f1f8e9; }
+.group-card .count { font-size: 13px; color: #888; font-weight: 400; margin-top: 4px; }
+
+/* ── QUIZ ── */
+#quiz header { margin-bottom: 16px; }
+.quiz-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.quiz-group { font-size: 14px; color: #888; }
+.quiz-score { font-size: 14px; color: var(--dark-green); font-weight: 700; }
+.progress-bar { background: #ddd; border-radius: 99px; height: 10px; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, var(--green), var(--yellow)); height: 100%; border-radius: 99px; transition: width .4s; }
+.question-card {
+  background: white; border-radius: 20px; padding: 22px 18px;
+  margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+.question-num { font-size: 14px; color: #aaa; margin-bottom: 8px; }
+.question-text { font-size: 20px; font-weight: 700; line-height: 1.6; color: #222; }
+.options { display: grid; gap: 10px; margin-bottom: 10px; }
+.opt-btn {
+  background: white; border: 2.5px solid #ddd; border-radius: 14px;
+  padding: 15px 16px; font-size: 18px; font-weight: 500; text-align: left;
+  cursor: pointer; font-family: inherit; transition: all .2s;
+  line-height: 1.5; color: #333;
+}
+.opt-btn:hover:not(:disabled) { border-color: var(--green); background: #f1f8e9; }
+.opt-btn.correct { background: #E8F5E9; border-color: var(--green); color: #1B5E20; }
+.opt-btn.wrong   { background: #FFEBEE; border-color: var(--red);   color: #B71C1C; }
+.opt-btn:disabled { cursor: default; }
+.explanation {
+  background: linear-gradient(135deg, #fffde7, #f9fbe7);
+  border-left: 5px solid var(--yellow); border-radius: 0 14px 14px 0;
+  padding: 16px; margin-top: 12px; font-size: 17px; line-height: 1.7;
+  display: none; color: #333;
+}
+.explanation.show { display: block; }
+.explanation .exp-title { font-weight: 900; color: #F57F17; margin-bottom: 6px; font-size: 15px; }
+#btn-next {
+  display: none; width: 100%; background: linear-gradient(135deg, var(--green), var(--dark-green));
+  color: white; border: none; border-radius: 14px; padding: 16px;
+  font-size: 19px; font-weight: 700; cursor: pointer; font-family: inherit;
+  margin-top: 10px; box-shadow: 0 4px 0 #1B5E20;
+}
+#btn-next:active { transform: translateY(2px); box-shadow: 0 2px 0 #1B5E20; }
+
+/* ── RESULT ── */
+#result { text-align: center; padding-top: 30px; }
+.result-emoji { font-size: 80px; margin: 10px 0; }
+.result-score { font-size: 52px; font-weight: 900; color: var(--dark-green); }
+.result-total { font-size: 20px; color: #666; margin-bottom: 8px; }
+.result-msg { font-size: 22px; font-weight: 700; margin-bottom: 30px; color: #333; }
+
+/* ── WRONG REVIEW ── */
+#wrong-review h2 { text-align:center; color: var(--dark-green); margin: 10px 0 16px; font-size:22px; }
+.wrong-empty { text-align:center; color:#aaa; padding: 40px; font-size:20px; }
+.review-card {
+  background: white; border-radius: 16px; padding: 18px 16px;
+  margin-bottom: 14px; box-shadow: 0 3px 10px rgba(0,0,0,.07);
+  border-top: 4px solid var(--orange);
+}
+.review-q { font-size: 18px; font-weight: 700; line-height: 1.6; margin-bottom: 10px; color: #222; }
+.review-ans {
+  background: #E8F5E9; border-radius: 10px; padding: 10px 14px;
+  font-size: 17px; color: #1B5E20; font-weight: 700; margin-bottom: 10px;
+}
+.review-exp { font-size: 16px; line-height: 1.7; color: #555; }
+.review-num { font-size: 13px; color: #bbb; margin-bottom: 6px; }
+
+/* ── SEARCH ── */
+#search h2 { text-align:center; color: var(--dark-green); margin: 10px 0 16px; font-size:22px; }
+.search-box {
+  display: flex; gap: 8px; margin-bottom: 16px;
+}
+.search-input {
+  flex: 1; border: 2.5px solid #ddd; border-radius: 12px;
+  padding: 14px 16px; font-size: 18px; font-family: inherit;
+  outline: none; transition: border .2s;
+}
+.search-input:focus { border-color: var(--green); }
+.btn-search-go {
+  background: var(--green); color: white; border: none; border-radius: 12px;
+  padding: 14px 18px; font-size: 20px; cursor: pointer;
+}
+.search-result-card {
+  background: white; border-radius: 14px; padding: 16px;
+  margin-bottom: 12px; box-shadow: 0 3px 8px rgba(0,0,0,.07);
+  border-left: 5px solid var(--light-green);
+}
+.src-num { font-size: 13px; color: #aaa; margin-bottom: 4px; }
+.src-q { font-size: 17px; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
+.src-ans { background: #f1f8e9; border-radius: 8px; padding: 8px 12px; font-size: 16px; color: #2E7D32; margin-bottom: 6px; }
+.src-keys { font-size: 13px; color: #aaa; }
+.tag { display:inline-block; background:#e8f5e9; color:#388e3c; border-radius:6px; padding:2px 7px; margin:2px; font-size:12px; }
+.search-empty { text-align:center; color:#aaa; padding:30px; font-size:19px; }
+.clear-wrong-btn { background: #fff3e0; color: #e65100; border: none; border-radius: 10px; padding: 10px 16px; font-size: 15px; cursor: pointer; font-family: inherit; margin-bottom: 12px; display: block; width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ══ HOME ══ -->
+<div id="home" class="screen active">
+  <div class="pikmin-wrap">
+    <div class="pikmin-group">
+      <div class="pikmin pikmin-red">
+        <div class="pikmin-leaf"></div>
+        <div class="pikmin-stem"></div>
+        <div class="pikmin-body">
+          <div class="pikmin-eyes"><div class="pikmin-eye"></div><div class="pikmin-eye"></div></div>
+        </div>
+        <div class="pikmin-feet"><div class="pikmin-foot"></div><div class="pikmin-foot"></div></div>
+      </div>
+      <div class="pikmin pikmin-yellow">
+        <div class="pikmin-leaf"></div>
+        <div class="pikmin-stem"></div>
+        <div class="pikmin-body">
+          <div class="pikmin-eyes"><div class="pikmin-eye"></div><div class="pikmin-eye"></div></div>
+        </div>
+        <div class="pikmin-feet"><div class="pikmin-foot"></div><div class="pikmin-foot"></div></div>
+      </div>
+      <div class="pikmin pikmin-blue">
+        <div class="pikmin-leaf"></div>
+        <div class="pikmin-stem"></div>
+        <div class="pikmin-body">
+          <div class="pikmin-eyes"><div class="pikmin-eye"></div><div class="pikmin-eye"></div></div>
+        </div>
+        <div class="pikmin-feet"><div class="pikmin-foot"></div><div class="pikmin-foot"></div></div>
+      </div>
+    </div>
+  </div>
+  <h1 class="title">班級經營期中考<br>複習遊戲 🌱</h1>
+  <p class="subtitle">114-2 教師資格考試 · 共 80 題</p>
+  <button class="btn btn-primary" onclick="showGroupSelect()">🎮 開始練習</button>
+  <button class="btn btn-wrong"   onclick="showWrongReview()">❌ 錯題複習</button>
+  <button class="btn btn-search"  onclick="showSearch()">🔍 關鍵字搜尋</button>
+</div>
+
+<!-- ══ GROUP SELECT ══ -->
+<div id="group-select" class="screen">
+  <h2>選擇題組</h2>
+  <div class="group-grid" id="group-grid"></div>
+  <button class="btn btn-back" onclick="goHome()">← 回首頁</button>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="screen">
+  <header>
+    <div class="quiz-meta">
+      <span class="quiz-group" id="quiz-group-name"></span>
+      <span class="quiz-score" id="quiz-score-text"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </header>
+  <div class="question-card">
+    <div class="question-num" id="question-num"></div>
+    <div class="question-text" id="question-text"></div>
+  </div>
+  <div class="options" id="options"></div>
+  <div class="explanation" id="explanation">
+    <div class="exp-title">📖 詳解分析</div>
+    <div id="exp-content"></div>
+  </div>
+  <button id="btn-next" onclick="nextQuestion()">下一題 →</button>
+  <button class="btn btn-back btn-sm" onclick="goHome()" style="margin-top:14px">⏹ 結束練習</button>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="result" class="screen">
+  <div class="result-emoji" id="result-emoji"></div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-total" id="result-total"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <button class="btn btn-primary" id="btn-retry"  onclick="retryQuiz()">🔄 再練一次</button>
+  <button class="btn btn-wrong"   onclick="showWrongReview()">❌ 複習錯題</button>
+  <button class="btn btn-back"    onclick="goHome()">🏠 回首頁</button>
+</div>
+
+<!-- ══ WRONG REVIEW ══ -->
+<div id="wrong-review" class="screen">
+  <h2>❌ 錯題複習</h2>
+  <div id="wrong-list"></div>
+  <button class="btn btn-back" onclick="goHome()">← 回首頁</button>
+</div>
+
+<!-- ══ SEARCH ══ -->
+<div id="search" class="screen">
+  <h2>🔍 關鍵字搜尋</h2>
+  <div class="search-box">
+    <input type="text" class="search-input" id="search-input" placeholder="輸入關鍵字，如：Dreikurs" onkeydown="if(event.key==='Enter')doSearch()">
+    <button class="btn-search-go" onclick="doSearch()">🔍</button>
+  </div>
+  <div id="search-results"></div>
+  <button class="btn btn-back" onclick="goHome()">← 回首頁</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// QUESTIONS DATA
+// ══════════════════════════════════════════
+const QUESTIONS = [
+  {id:1,group:"第一組 常規技巧",q:"在班級常規的維持中，CURWIN和MENDLER曾提及「80-15-5」規則，在上述規則中的「5」是指？",opts:["時常破壞班級規範的人數比率","偶而會犯規的人數比率","不太會犯規的學生人數比率","可能的誤差比率"],ans:0,keys:["80-15-5","Curwin","Mendler","尊嚴管理"],exp:"【80-15-5規則】Curwin & Mendler尊嚴管理理論：80%幾乎不違規、15%偶爾犯規、5%時常破壞班規（慢性問題學生）。這5%需個別化介入與協商契約。答案選A。"},
+  {id:2,group:"第一組 常規技巧",q:"葛溫和曼德勒的尊嚴管理理論提出三層面管理模式，其中與個別學生重新協商契約、實施與監控計畫、必要時修改或使用創意策略，這是哪一個層面？",opts:["解決層面","預防層面","支持層面","行動層面"],ans:0,keys:["尊嚴管理","三層面","解決層面","協商契約"],exp:"【三層面管理】預防層面（建立班規）、支持層面（維持秩序）、解決層面（針對個別學生重新協商、創意策略）。個別協商契約屬解決層面。答案選A。"},
+  {id:3,group:"第一組 常規技巧",q:"採用低調班級經營策略，張老師注意到曉方沒翻開習作本且臉上出現不耐煩的表情，張老師走近曉方說：「曉方，現在應該要完成第15頁的練習題。」他依序採用了哪些低調班級經營技巧？",opts:["預測、回應","預測、轉向","轉向、回應","回應、轉向"],ans:1,keys:["低調班級經營","預測","轉向","回應","anticipation","deflection"],exp:"【低調班級經營三技巧】預測(anticipation)=提前察覺問題跡象；轉向(deflection)=引導回到正確行為；回應(reaction)=對已發生行為做回應。本題：察覺不耐煩（預測）→告知要做第15頁（轉向）。答案選B。"},
+  {id:4,group:"第一組 常規技巧",q:"低調班級經營強調在不影響教學節奏的情況下，終止學生不當行為。下列在課堂上出現的行為問題，哪些較適用於低調班級經營？",opts:["甲乙丁","甲丙戊","乙丙戊","乙丁戊"],ans:0,keys:["低調班級經營","輕微干擾"],exp:"【低調班級經營適用情境】適用於輕微、短暫的干擾行為（如說悄悄話、分心、輕微走動），不適用於嚴重違規。甲乙丁屬輕微干擾，可用不打斷教學的方式處理。答案選A。"},
+  {id:5,group:"第一組 常規技巧",q:"德瑞克斯認為「稱讚乃是在學生將工作做得很好時才給予的」，下列哪一句話最符合德瑞克斯所謂的「稱讚」？",opts:["我可以感受到你很認真","你剛剛彈的那首曲子真的很動聽","一起參加週會的感覺很好","我發覺你真的很喜歡彈吉他"],ans:1,keys:["德瑞克斯","稱讚","鼓勵","Dreikurs"],exp:"【稱讚 vs 鼓勵】Dreikurs主張：稱讚=針對成果（做得好才給）；鼓勵=針對努力與過程（不管結果都給）。「你剛剛彈的那首曲子真的很動聽」是針對成果表現的讚美，屬稱讚。答案選B。"},
+  {id:6,group:"第一組 常規技巧",q:"「教師提昇學生的信心時，應多使用鼓勵，少用稱讚。」下列何者較具有「鼓勵」性質的意涵？",opts:["你真是聰明！十分鐘就把數學第一部份題目做好了！","你十分鐘就把數學第一部份題目做好了，真是不簡單呀！","只有數學高手才能在十分鐘內把數學第一部份題目做好！","看到你把第一部份數學題目做好了，希望你繼續保持，加油！"],ans:3,keys:["鼓勵","稱讚","Dreikurs","信心"],exp:"【鼓勵的特徵】鼓勵重視過程、努力與進步，而非結果。D「希望你繼續保持，加油！」聚焦在未來努力的方向，具有鼓勵性質；A讚美天賦、B仍是結果稱讚、C設立標準。答案選D。"},
+  {id:7,group:"第一組 常規技巧",q:"下列哪一項屬於無效的稱讚？",opts:["你代表班上同學比賽得到佳作，我們與有榮焉","你有今天的好表現，那是因為你能一直超越自我","這次本班成績進步，是因為命題老師多半是本班的任課老師","這次班級獲得團體總錦標，那是各位用汗水所編織出來的結果"],ans:2,keys:["無效稱讚","外部歸因"],exp:"【無效稱讚】有效稱讚應讓學生將成功歸因於自身努力。C將成績進步歸因於「命題老師是本班任課老師」，屬外部歸因，無法提升學生自我效能。答案選C。"},
+  {id:8,group:"第一組 常規技巧",q:"學生一再發生不當行為干擾班級學習，可用何種方法校正？",opts:["交付處理","隔離法","警告法","不予理會"],ans:1,keys:["隔離法","不當行為","校正行為"],exp:"【隔離法（Time-out）】學生一再發生干擾行為時，隔離法將學生暫時移離刺激環境，中斷增強來源，有效校正重複性不當行為。答案選B。"},
+  {id:9,group:"第一組 常規技巧",q:"小平為尋求關注，經常打斷老師大聲提問。老師決定刻意不理會小平，此後老師較可能面臨哪些狀況？甲、小平更頻繁大聲插話；乙、小平立刻停止隨意發言；丙、干擾行為暫時停止，但可能某天又故態復萌",opts:["甲乙","甲丙","乙丙","甲乙丙"],ans:1,keys:["消弱","extinction burst","消弱爆發","自發恢復"],exp:"【消弱原理】撤除增強後：①短期消弱爆發—行為反而增加（甲）；②長期行為逐漸減少；③可能自發恢復（丙）。乙（立刻停止）不符合消弱原理。答案選B（甲丙）。"},
+  {id:10,group:"第一組 常規技巧",q:"下列哪一個班級經營模式建議教師使用增強原則和程序，以教導學生的學習活動？",opts:["行為塑造型","溝通互動型","果斷紀律型","合理邏輯型"],ans:0,keys:["行為塑造型","增強","操作制約","行為主義"],exp:"【班級經營模式】行為塑造型源自行為主義，強調使用增強物塑造學生行為。溝通互動型=Gordon；果斷紀律型=Canter；合理邏輯型=Dreikurs。答案選A。"},
+  {id:11,group:"第一組 常規技巧",q:"下列敘述哪一項非屬「融合教育」（INCLUSIVE EDUCATION）的觀念？",opts:["回歸主流","混齡教學","聽障生在普通班上課","無障礙校園環境設計"],ans:1,keys:["融合教育","inclusive education","回歸主流"],exp:"【融合教育】融合教育強調特殊需求者在普通班一起學習，包含回歸主流、無障礙環境等。混齡教學是不同年齡學生一起上課，與融合教育概念不同。答案選B。"},
+  {id:12,group:"第二組 違規處置",q:"張老師在下課時無意間發現小明很喜歡在黑板上塗鴉。下列何者是較適當的處理方式？",opts:["劈頭便罵，要小明不要在黑板上面亂畫","不以為意，因為那只是小明的個別喜好而已","了解塗鴉的內容，將他的興趣與學習内容結合","走到黑板前看清楚，只要沒有寫罵人的語句就可以了"],ans:2,keys:["興趣引導","正向管教","因材施教"],exp:"【正向引導原則】發現學生興趣，最佳做法是了解並與學習結合，符合「因勢利導」教育原則。答案選C。"},
+  {id:13,group:"第二組 違規處置",q:"教師只要學生舉手發言就給好寶寶卡，集滿十張平時成績加一分。這種教學策略屬於下列何者？",opts:["間歇增強","後效契約","代幣制度","祖母法則"],ans:2,keys:["代幣制度","token economy","好寶寶卡"],exp:"【代幣制度（Token Economy）】以象徵性代幣（好寶寶卡）作為立即增強物，累積後換取實質獎勵（加分）。答案選C。"},
+  {id:14,group:"第二組 違規處置",q:"林老師安撫學生後請學生思考：甲、除了發脾氣還可以做哪些事？乙、如果你做了那些事會有什麼後果？丙、在這些後果中哪一個最好？丁、如果再發生同樣的情況你會怎麼做？林老師應用了哪一項策略？",opts:["認知本位策略","行動照顧策略","情緒抒發策略","抗拒支配策略"],ans:0,keys:["認知本位策略","情緒管理","認知重構","問題解決"],exp:"【認知本位策略】透過引導學生思考替代方案、預測後果、選擇最佳方案，屬認知層面介入，幫助發展問題解決能力。答案選A。"},
+  {id:15,group:"第二組 違規處置",q:"姜老師的想法：「學生獲得獎勵的行為會重複出現，被忽視或懲罰的行為會減少或消失，可適當使用增強物塑造學生的行為。」姜老師的想法較接近哪一選項的主張？",opts:["葛拉塞的選擇理論","高登的教師效能訓練","史金納的操作制約學習","雷多和瓦登堡的團體動力學"],ans:2,keys:["史金納","操作制約","增強物","行為主義","Skinner"],exp:"【操作制約—Skinner】行為受後果影響：正增強使行為增加，懲罰/消弱使行為減少。Glasser=選擇理論；Gordon=教師效能訓練；Redl=團體動力。答案選C。"},
+  {id:16,group:"第二組 違規處置",q:"在國語課寫作練習時，小真在老師鼓勵下回想上次作文得獎的經驗，逐漸對自己產生信心，最後能獨立寫完一篇作品。此情境最能說明下列哪個理論？",opts:["庫柏—經驗學習","馬斯洛—需求層次","班杜拉—自我效能","維高斯基—社會文化"],ans:2,keys:["自我效能","Bandura","班杜拉","成功經驗"],exp:"【自我效能—班杜拉】自我效能四個來源：①過去成功經驗（最重要）②替代經驗③言語說服④生理狀態。小真回想作文得獎（過去成功經驗）→產生信心。答案選C。"},
+  {id:17,group:"第二組 違規處置",q:"學校常公開表揚學業或品行方面有良好表現的同學，希望作為其他同學的楷模。這主要是依據下列哪一個學者的觀點？",opts:["史金納的操作制約","桑代克的準備律","巴夫洛夫的古典制約","班度拉的社會學習論"],ans:3,keys:["社會學習論","楷模","班度拉","Bandura","觀察學習"],exp:"【社會學習論—班度拉】Bandura主張人可透過觀察楷模行為進行學習（觀察學習）。公開表揚優良同學讓其他學生透過觀察模仿。答案選D。"},
+  {id:18,group:"第二組 違規處置",q:"六年級的小銘不高興時便以三字經攻擊別人。老師採用下列何種方式最能教導他改善言語攻擊行為？",opts:["不用理會他，予以忽視","不論攻擊的原因，立即採取嚴格責罰","當場先要求他道歉，再通知家長來處理","平時建立師生關係，在攻擊發生時嚴肅要求他改過"],ans:3,keys:["言語攻擊","師生關係","正向管教"],exp:"【言語攻擊行為處理】最有效策略：①平時建立良好師生關係（信任基礎）②攻擊發生時嚴肅要求改過（明確界線）。忽視會強化或惡化；立即嚴懲忽略原因。答案選D。"},
+  {id:19,group:"第二組 違規處置",q:"媽媽帶小榮回娘家，他到了門口遲遲不肯進去，一直躲在媽媽背後。小榮的趨避反應受到大腦哪兩個關鍵結構影響？",opts:["杏仁核、額葉","杏仁核、海馬迴","枕葉、額葉","顳葉、海馬迴"],ans:0,keys:["杏仁核","額葉","趨避反應","大腦"],exp:"【大腦情緒調節】杏仁核：偵測威脅、產生恐懼/迴避反應；前額葉：評估情境、做出理性決策。兩者共同影響趨避反應。答案選A。"},
+  {id:20,group:"第二組 違規處置",q:"輔導老師想協助中學生提升情緒智能，以下何種方式最不恰當？",opts:["協助青少年覺察情緒","學習抑制負面情緒","學習表達真實情緒","運用情緒調適的策略"],ans:1,keys:["情緒智能","情緒管理","抑制情緒","EQ"],exp:"【情緒智能（EI）】提升情緒智能應：覺察、表達、調適情緒。「抑制負面情緒」最不適當，情緒壓抑反而可能導致更嚴重的爆發或身心問題。答案選B。"},
+  {id:21,group:"第二組 違規處置",q:"上課時，阿華時常無法集中注意力，坐立不安，會擅自拿取同學的文具。當阿華表現這類不當行為時，下列何者是林老師最恰當的處理？",opts:["以懲罰的方式來消除不當行為","採用消極的態度與做法來面對","與其他的普通學生同等地對待","了解行為成因並尋求解決方法"],ans:3,keys:["ADHD","注意力","了解原因","個別差異"],exp:"【特殊需求學生處理原則】阿華的行為（注意力不集中、坐立不安、衝動）可能源自ADHD等特殊需求。最恰當做法是先了解行為成因，再尋求適切支持策略。答案選D。"},
+  {id:22,group:"第二組 違規處置",q:"大腦的組織中，與記憶有關的神經組織是下列何者？",opts:["下視丘","海馬迴","胼肢體","杏仁核"],ans:1,keys:["海馬迴","記憶","大腦","hippocampus"],exp:"【大腦記憶中樞】海馬迴（hippocampus）：負責將短期記憶轉化為長期記憶，與空間記憶密切相關。下視丘=調節體溫/飢渴；胼胝體=連接左右腦；杏仁核=情緒反應。答案選B。"},
+  {id:23,group:"第二組 違規處置",q:"小嘉認為學生就應該要遵守老師訂下的規矩。根據皮亞傑的理論，小嘉的想法最符合下列何種道德發展的特性？",opts:["認為規則是一套廣泛被採用的社會標準","認為規則是根據公平正義原則而訂定的","抱持合作的道德，認為訂定規則是為了維持秩序","抱持道德現實觀，認為班規是絕對且不可改變的"],ans:3,keys:["皮亞傑","道德發展","他律","道德現實觀","Piaget"],exp:"【皮亞傑道德發展】他律道德/道德現實主義：規則被視為絕對、神聖且不可改變，必須無條件服從權威。小嘉認為「學生就應該遵守老師訂的規矩」正是此特徵。答案選D。"},
+  {id:24,group:"第二組 違規處置",q:"小達最近作業經常缺交，老師欲以三明治溝通法與家長溝通。以下哪一種對話方式較符合三明治結構？",opts:["「小達雖然很聰明，但他最近經常沒交作業。」","「輔導老師說能幫忙，您是否同意請輔導老師協助小達？」","「小達最近作業時常未交，可能與他在家中的作息有關，我知道您很關心他的學習，我需要您一起幫忙改善他的作息。」","「您把小達教得很好，平時熱心助人，但他最近作業經常缺交，請您協助了解他的學習困難，有您的支持他定能做得更好。」"],ans:3,keys:["三明治溝通法","sandwich technique","親師溝通","正面開頭"],exp:"【三明治溝通法】結構：正面（肯定）→問題→正面（期望/鼓勵）。D：「您把小達教得很好，平時熱心助人」（正面）→「最近作業缺交」（問題）→「有您的支持他定能做得更好」（正面期望）。答案選D。"},
+  {id:25,group:"第二組 違規處置",q:"阿明和大雄兩個學生起了衝突，其他同學告狀說：「阿明被大雄欺負哭了！」下列教師的處理方式，哪一種較符合現象學思考？",opts:["一個巴掌拍不響，兩人都要究責","先不驟下評斷，問明事情的始末","根據兩個人過往的表現來做判斷","依據現場多數小朋友的判斷為準"],ans:1,keys:["現象學思考","phenomenological","客觀判斷","衝突處理"],exp:"【現象學思考】現象學強調先懸置判斷（epoché），從當事人主觀經驗出發理解事件。先問明事情始末=懸置評斷、了解當事人觀點。答案選B。"},
+  {id:26,group:"第二組 違規處置",q:"小朱一年級時只要心情不好就會哭鬧或罵人。升上五年級後，他心情不好時已能用深呼吸讓自己平靜下來。小朱的轉變跟大腦哪一部分的成熟比較有關？",opts:["前額葉","胼胝體","海馬迴","松果體"],ans:0,keys:["前額葉","情緒調節","衝動控制","大腦發展"],exp:"【前額葉（Prefrontal Cortex）】前額葉負責：情緒調節、衝動控制、計畫與決策，約到25歲才完全成熟。小朱從哭鬧罵人→深呼吸平靜，反映前額葉調節功能逐漸成熟。答案選A。"},
+  {id:27,group:"第二組 違規處置",q:"根據阿德勒學派的觀點，下列何者是德萊克斯認為兒童不當行為的可能原因？",opts:["低自我控制","偏差同儕影響","錯誤的行為目標","社會連結不完整"],ans:2,keys:["德萊克斯","Dreikurs","錯誤目標","阿德勒","不當行為四目標"],exp:"【Dreikurs不當行為四目標（阿德勒學派）】兒童不當行為源於「錯誤的行為目標」：①尋求關注②尋求權力③尋求報復④自我放棄。這四個都是錯誤的歸屬感追求方式。答案選C。"},
+  {id:28,group:"第二組 違規處置",q:"六年級的小志常故意「為反對而反對」，在課堂上與任課老師起衝突。導師可以採用下列哪些正向管教措施？甲、要求小志對任課老師口頭道歉；乙、理解衝突的背後原因；丙、討論持續衝突的可能後果；丁、當小志和老師理性溝通時給予稱讚",opts:["甲乙丙","甲乙丁","乙丙丁","甲两丁"],ans:2,keys:["正向管教","為反對而反對","尋求權力","衝突處理"],exp:"【正向管教原則】強迫道歉（甲）屬威權方式，非正向管教。正向管教包含：理解行為動機（乙）、討論後果（丙）、正增強理性行為（丁）。答案選C（乙丙丁）。"},
+  {id:29,group:"第二組 違規處置",q:"下列哪一項敘述較能說明青少年「不顧風險在懸崖邊自拍」的行為？",opts:["掌管情緒經驗與感官刺激的邊緣系統尚未發展成熟","知覺集中傾向導致青少年容易忽視活動的風險","處理高層次認知判斷的前額葉尚未發展成熟","後設認知的提升導致青少年認為自己不容易受傷"],ans:2,keys:["前額葉","青少年","風險評估","大腦發展"],exp:"【青少年大腦發展】青少年邊緣系統（情緒/尋求刺激）已充分發展，但前額葉（風險評估、理性判斷）尚未完全成熟，導致追求刺激但無法正確評估風險。答案選C。"},
+  {id:30,group:"第二組 違規處置",q:"導師請學生將拖延行為擬人化，學生指出拖延就是一隻烏龜，慢步行走。接著討論：「如果問題再持續三個月，對你的意義是什麼？」此作法最可能應用下列何種理論？",opts:["敘事治療","現實治療","認知行為治療","焦點解決短期治療"],ans:0,keys:["敘事治療","外化","擬人化","narrative therapy","問題外化"],exp:"【敘事治療—外化技術】問題外化（externalization）：將問題與人分開，把問題擬人化（拖延=烏龜）。Michael White & David Epston創立。答案選A。"},
+  {id:31,group:"第二組 違規處置",q:"教師應依據學生不同的需求與情境來安排座位。下列何種座位安排方式較為不妥？",opts:["為維護其他同學的受教權，把嚴重違反紀律的學生暫時安排在教室角落","運用匿名方式了解學生的人際關係，作為安排座位的參考","為增加學生互動機會，將桌椅排成ㄇ字型","為激勵學生更加精進，按照成績高低依序安排全班的座位"],ans:3,keys:["座位安排","標籤效應","成就差異","班級經營"],exp:"【座位安排原則】按成績高低安排座位會造成「標籤效應」，讓學習落後的學生受到明顯標示，損害自尊心，違反教育公平原則。答案選D。"},
+  {id:32,group:"第二組 違規處置",q:"小揚在教室奔跑時不小心把同學的水杯打翻了，以下老師的作法何者符合「邏輯後果」的管教原則？",opts:["要求小揚寫班規一遍","要求小揚上台唱歌娛樂同學","要求小揚反省並檢討自己的錯誤之處","要求小揚把地板拖乾並且向同學道歉"],ans:3,keys:["邏輯後果","logical consequence","Dreikurs","管教"],exp:"【邏輯後果—Dreikurs】邏輯後果必須與行為有邏輯關聯性：打翻水杯→清理地板+道歉，直接對應行為造成的影響。寫班規、唱歌與行為無關，屬人為懲罰。答案選D。"},
+  {id:33,group:"第二組 違規處置",q:"為達班級凝聚之目的，同儕會相互約束統一服儀。上述情境最符合涂爾幹的哪一個理論觀點？",opts:["道德規範","社會正義","權力展演","社會認同"],ans:0,keys:["涂爾幹","Durkheim","道德規範","集體意識"],exp:"【涂爾幹道德規範】Durkheim認為社會規範是集體意識的體現，透過社會化過程內化。同儕相互約束統一服儀=集體道德規範運作，體現集體意識與社會整合。答案選A。"},
+  {id:34,group:"第二組 違規處置",q:"育之把自己的座位弄得髒亂不堪，老師除了請他把座位清理乾淨，還要求他把教室打掃一遍。這是下列何種機制的應用？",opts:["負增強","饜足法","反應代價","過度矯正"],ans:3,keys:["過度矯正","overcorrection","行為改變","懲罰"],exp:"【過度矯正（Overcorrection）】不只恢復原狀，還要做更多（復原過度補償）。本題不只清理自己的座位，還要打掃整個教室=復原過度補償。答案選D。"},
+  {id:35,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"國輝時常與同學發生衝突，若同學不小心碰到他或開玩笑，他就會攻擊同學或用髒話罵同學。國輝的適應問題較可能歸類為下列何者？",opts:["學業適應問題","內向性行為問題","外向性行為問題","創傷後壓力症候群"],ans:2,keys:["外向性行為","攻擊行為","適應問題"],exp:"【行為問題分類】外向性行為問題（Externalizing）：攻擊、反抗、衝動等向外表現的行為；內向性行為問題（Internalizing）：退縮、焦慮等向內收斂的行為。國輝的攻擊和髒話攻擊屬外向性。答案選C。"},
+  {id:36,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"小馨上課極少主動發言，下課時都是一個人靜靜坐著。最近常向奶奶抱怨上學很有壓力，不想到學校去。小馨所表現出來的問題，最傾向於下列何項適應困難型態？",opts:["外向性行為","內向性行為","不良習癖行為","學業適應問題"],ans:1,keys:["內向性行為","退縮","拒學","焦慮"],exp:"【內向性行為問題（Internalizing）】小馨：沉默退縮、獨處、抱怨上學有壓力、不想上學，這些都是向內收斂的情緒行為問題（焦慮、退縮、逃避）。答案選B。"},
+  {id:37,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"「小明為了要搶妹妹的玩具，把妹妹打哭了」。這種攻擊行為是屬於下列何者？",opts:["工具性攻擊","敵意性攻擊","報復性攻擊","關係性攻擊"],ans:0,keys:["工具性攻擊","instrumental aggression","攻擊類型"],exp:"【攻擊行為類型】工具性攻擊（Instrumental Aggression）：以攻擊作為達成目的的工具（搶奪玩具）；敵意性攻擊：以傷害他人為目的；報復性攻擊：因被傷害而反擊。答案選A。"},
+  {id:38,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"王老師出於善意跟大家介紹：「小凱因為父親有家暴行為，父母離異後由外公照料，轉學到班上，請大家要多關心他」。王老師最可能違反下列何種學生輔導工作倫理守則？",opts:["隱私權","公正對待","知後同意","預警責任"],ans:0,keys:["隱私權","保密","倫理","學生輔導","個資"],exp:"【輔導倫理—隱私權】未經當事人同意，公開學生的家庭隱私（家暴、離婚、監護狀況）嚴重侵犯學生隱私權。即使出於善意也違反保密原則。答案選A。"},
+  {id:39,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"導師辦理母親節的「感恩媽媽」班級輔導活動，此屬於三級輔導中的哪一個層級？",opts:["發展性輔導","處遇性輔導","介入性輔導","危機性輔導"],ans:0,keys:["三級輔導","發展性輔導","初級預防","班級輔導"],exp:"【三級輔導制度】第一級—發展性輔導：針對全體學生，促進正常發展（如班級輔導活動、生命教育）；第二級—介入性輔導：針對適應欠佳學生；第三級—處遇性輔導：針對嚴重問題。感恩媽媽活動=全班=發展性輔導。答案選A。"},
+  {id:40,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"根據現行《學生輔導法》的規範，下列何者不是發展性輔導的工作內容？",opts:["生活輔導","學習輔導","家庭輔導","生涯輔導"],ans:2,keys:["學生輔導法","發展性輔導","生活輔導","生涯輔導"],exp:"【學生輔導法—發展性輔導工作】依法包含：生活輔導、學習輔導、生涯輔導。家庭輔導不在發展性輔導的法定範圍內。答案選C。"},
+  {id:41,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"針對適應欠佳、重複發生問題行為學生的輔導工作，較屬於下列哪個層級的輔導？",opts:["發展性輔導","介入性輔導","處遇性輔導","教育性輔導"],ans:1,keys:["介入性輔導","二級輔導","適應欠佳","重複問題行為"],exp:"【三級輔導—介入性輔導（第二級）】針對適應欠佳、重複發生問題行為，或具高危險因子的學生，由輔導教師提供較密集的個別或小團體輔導。答案選B。"},
+  {id:42,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"有關學業成績低落個案的輔導，主要有三大步驟，其正確的順序為下列何者？",opts:["分析問題原因→了解問題性質→進行輔導矯治","了解問題性質→進行輔導矯治→分析問題原因","了解問題性質→分析問題原因→進行輔導矯治","分析問題原因→進行輔導矯治→了解問題性質"],ans:2,keys:["學業輔導","三步驟","了解問題","分析原因","輔導矯治"],exp:"【學業輔導三步驟】正確順序：①了解問題性質（是什麼問題）→②分析問題原因（為什麼）→③進行輔導矯治（怎麼做）。先了解性質才能分析原因，再依原因選擇矯治方式。答案選C。"},
+  {id:43,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"小安考試沒考好感到沮喪，認為自己很沒用。以下何者較符合艾里斯理性情緒行為治療學派的輔導方式？",opts:["鼓勵小安保持積極心態及下次會做得更好","挑戰小安認為考不好等於自己沒用的想法","教導小安如何降低考試焦慮的做法及策略","引導小安想像如果考試進步會有多麼開心"],ans:1,keys:["REBT","艾里斯","Ellis","理性情緒行為治療","非理性信念","ABC理論"],exp:"【REBT—艾里斯】ABC理論：A（事件）→B（信念）→C（後果/情緒）。非理性信念（「考不好=沒用」）導致負面情緒。治療核心：D（駁斥）—挑戰非理性信念。答案選B。"},
+  {id:44,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"小宏對老師說：「我知道自己要改變，但我不知道該怎麼做。」以下何者符合現實治療學派的WDEP做法？",opts:["WHAT：協助小宏了解什麼因素造成遲交","DECISION：協助小宏練習如何做決定","EVALUATION：協助小宏評估自己的能力","PLANNING：協助小宏擬定時間管理計畫"],ans:3,keys:["WDEP","現實治療","Glasser","葛拉塞","計畫","Planning"],exp:"【現實治療WDEP模式—Glasser】W=Wants、D=Doing、E=Evaluation、P=Planning。小宏說「不知道怎麼做」→需要P（Planning）：擬定具體可行的時間管理計畫。答案選D。"},
+  {id:45,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"老師持續傾聽，讓學生表達感受。這樣的輔導方式符合羅吉斯人本學派的哪一個概念？",opts:["賦能","普同感","同理心","無條件積極關注"],ans:3,keys:["Rogers","羅吉斯","無條件積極關注","傾聽","人本學派","UPR"],exp:"【Rogers三核心條件】無條件積極關注（UPR）：無論個案說什麼，都持續給予接納與關注，不附加任何條件。持續傾聽讓學生表達感受=無條件積極關注。答案選D。"},
+  {id:46,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"下列哪一種情況最能說明羅吉斯「無條件的正向關懷和接納」？",opts:["只要小萱表現良好，父母都會特別讚賞並立即給予獎品","小萱把咖哩倒在客廳的新地毯上，父母不但沒有生氣，還說她做得很好","小萱和妹妹打架弄傷了妹妹。爸媽告訴小萱雖然她做錯事，但仍然是他們的寶貝孩子","小萱不小心弄壞同學的貴重樂器。媽媽告訴小萱，只要以後不要再發生這種事，就還是媽媽的好孩子"],ans:2,keys:["無條件積極關注","Rogers","UPR","接納","人本"],exp:"【無條件正向關懷】C：父母承認小萱做錯事（不否認行為），但同時表達「仍然是寶貝孩子」（對人的接納不變）=真正的無條件。D有附加條件（「只要以後不再發生」）。答案選C。"},
+  {id:47,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"下列哪些是個人中心學派治療關係的要件？甲、同情心；乙、真誠一致；丙、積極鼓勵；丁、無條件積極關注",opts:["甲乙","甲丁","乙丙","乙丁"],ans:3,keys:["個人中心","Rogers","三核心條件","真誠一致","無條件積極關注"],exp:"【個人中心學派三核心條件】①真誠一致（Congruence）②無條件積極關注（UPR）③同理心（Empathy）。同情心≠同理心；積極鼓勵不是核心條件。乙（真誠一致）和丁（無條件積極關注）正確。答案選D（乙丁）。"},
+  {id:48,group:"第三組 偏差行為的案例處置與輔導派典(1)",q:"羅吉斯是個人中心治療取向的代表人物，他主張所有的人類天生都具有下列哪一種傾向？",opts:["歸屬感","自尊心","自我實現","自我效能"],ans:2,keys:["Rogers","自我實現","人本主義","個人中心","actualization"],exp:"【Rogers人本主義核心】Rogers主張人類天生具有「自我實現傾向」（actualizing tendency）——朝向成長、發展和潛能實現的內在驅力。自我效能是Bandura的概念。答案選C。"},
+  {id:49,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"輔導教師幫助學生把問題與個人分開來看，不把自己等同於問題，並幫助學生對事件的舊有解釋中重新尋找新的意義，讓學生選擇自己要走的方向。請問這種治療方式屬於何種諮商治療理論？",opts:["存在主義","現實治療","敘事治療","家庭系統治療"],ans:2,keys:["敘事治療","外化","問題外化","narrative therapy","White","Epston"],exp:"【敘事治療—Michael White & David Epston】核心技術：「問題外化」（把問題與人分開）、「重新詮釋」（找到事件新意義）、「支線故事」（發展新可能性）。答案選C。"},
+  {id:50,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"請問何者是溝通分析（Transactional Analysis）學派的創始人？",opts:["羅傑斯（Carl R. Rogers）","法蘭克（Viktor E. Frankl）","伯恩（Eric Berne）","阿德勒（Alfred Adler）"],ans:2,keys:["溝通分析","TA","伯恩","Eric Berne","PAC"],exp:"【溝通分析（TA）創始人】Eric Berne（伯恩）創立溝通分析理論，提出PAC三個自我狀態：Parent（父母）、Adult（成人）、Child（兒童），以及互補、交叉、曖昧三種溝通模式。答案選C。"},
+  {id:51,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"拉澤勒斯所創的多重模式治療法中的BASIC I.D.七種層面，其中「S」是屬於哪種概念？",opts:["自發性（spontaneity）","支持（support）","系統（system）","感覺（sensation）"],ans:3,keys:["多重模式治療","BASIC ID","Lazarus","感覺","sensation"],exp:"【多重模式治療—Lazarus】BASIC I.D.：B=Behavior、A=Affect、S=Sensation（感覺/身體感受）、I=Imagery、C=Cognition、I=Interpersonal、D=Drugs/Biology。S=感覺。答案選D。"},
+  {id:52,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"在處理具攻擊性偏差行為的學生時，專任輔導教師最應優先考量的實務原則是：",opts:["立即將學生送往校外輔導機構接受專業處置","先進行危機評估與風險分析，確保現場人員安全","要求家長帶回管教，暫時停止其學校受教權","將事件交由學務處處理，以避免誤觸法律責任"],ans:1,keys:["危機評估","攻擊行為","風險分析","安全"],exp:"【危機處理原則】面對攻擊性行為，第一優先永遠是安全（safety first）：進行危機評估與風險分析，確保在場人員安全。之後才考慮後續輔導介入。答案選B。"},
+  {id:53,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"有關敘事治療（narrative therapy）的敘述，下列何者不正確？",opts:["是心理治療的一種病理化理論與技術取向","根植於後現代及社會建構理論","由Michael White和David Epston兩人於1970-80年代開創","從當事人角度理解問題而非專家角度理解"],ans:0,keys:["敘事治療","非病理化","後現代","社會建構","White","Epston"],exp:"【敘事治療特徵】敘事治療是「非病理化」取向，不將當事人的問題視為個人病理或缺陷，而是從社會建構、文化脈絡理解問題故事。A說「病理化」是錯誤的，敘事治療恰恰反對病理化。答案選A。"},
+  {id:54,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"專輔教師跟學生說：「假設你可以穿越時空，坐著時光機去到幾個月後，所有的困擾都解決了，你覺得你的生活會有哪些變得不一樣？」請問這是運用焦點解決短期諮商的哪一個技術？",opts:["彷彿技術（acting as if）","奇蹟問句（miracle question）","例外技術（exception）","跳脫問題的談話（problem-free talk）"],ans:1,keys:["焦點解決","奇蹟問句","SFBT","miracle question","未來導向"],exp:"【焦點解決—奇蹟問句（miracle question）】引導個案想像問題消失後的未來狀態，協助建構解決願景。「穿越時空到困擾都解決的未來，生活有何不同」=奇蹟問句的變化形式。答案選B。"},
+  {id:55,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"一位國三生說：「很快要畢業了，看其他同學很認真念書，好像都知道自己要做什麼，但我還是很迷惑，念不下讀書，覺得很煩，不想跟別人講話，什麼都不想做，只想趕快離開這種生活。」以下諮商師的回應，何者最具備「同理」回應的特色？",opts:["你對即將畢業感到迷惘，對生活感到煩悶，甚麼都不想做。","你不想念書，覺得生活壓力大，想快點畢業。","最近你不想跟別人說話，想逃離你的生活。","面臨畢業，看著同學認真念書或準備未來，你卻不知道要幹嘛？"],ans:0,keys:["同理心","empathy","反映感受","諮商回應"],exp:"【同理回應】完整同理=反映情感（迷惘、煩悶、什麼都不想做）+反映內容（即將畢業的處境）。A最完整地反映了當事人說的感受和內容，且不扭曲或省略。答案選A。"},
+  {id:56,group:"第四組 偏差行為的案例處置與輔導派典(2)",q:"依據伯恩的溝通分析理論，小哲說老師因下雨沒帶他們去搭捷運，媽媽說「這讓你們失望，對不對，你一定感到很難過。」上述對話屬於哪一種PAC的溝通類別？",opts:["曖昧溝通（ulterior transaction）","交叉溝通（crossed transaction）","權威溝通（authoritative transaction）","互補溝通（complementary transaction）"],ans:3,keys:["溝通分析","PAC","互補溝通","伯恩","Berne","TA"],exp:"【溝通分析—互補溝通（Complementary Transaction）】溝通雙方的反應符合預期（小哲=Child表達感受，媽媽=Nurturing Parent回應安慰）。訊息流暢無阻，溝通可持續。答案選D。"},
+  {id:57,group:"第五組 親師溝通",q:"以政的父母對他的管教是以溫暖的態度和堅定的要求教導他遵從規範。根據包姆林（Baumrind）的觀點，這比較屬於下列哪一種方式？",opts:["溫暖型（warmth style）","開明權威型（authoritative style）","獨裁型（authoritarian style）","不一致型（inconsistent style）"],ans:1,keys:["Baumrind","包姆林","開明權威型","管教方式","溫暖堅定"],exp:"【Baumrind四種管教方式】開明權威型（Authoritative）：高溫暖+高要求（堅定），是最理想的管教方式；獨裁型=低溫暖+高要求；寬容溺愛型=高溫暖+低要求；不參與型=低溫暖+低要求。答案選B。"},
+  {id:58,group:"第五組 親師溝通",q:"小洲的父母管教時缺乏溫暖及關愛，常以嚴格的規範要求他。根據包姆林的理論，較可能屬於哪一種管教方式？",opts:["不參與型（uninvolved style）","寬容溺愛型（permissive style）","民主威信型（authoritative style）","威權獨斷型（authoritarian style）"],ans:3,keys:["Baumrind","威權獨斷型","管教方式","嚴格","缺乏溫暖"],exp:"【Baumrind—威權獨斷型（Authoritarian）】低溫暖+高控制/嚴格要求：重視服從與紀律，缺少情感回應。「缺乏溫暖」+「嚴格規範要求」=威權獨斷型。答案選D。"},
+  {id:59,group:"第五組 親師溝通",q:"家長完全信賴學校和教師，且對學校或教師說明的事項持正面的態度，盡量配合。這是下列哪一類型的家長？",opts:["積極型家長","嚴苛型家長","放手型家長","冷漠型家長"],ans:2,keys:["家長類型","放手型","親師合作"],exp:"【家長類型分類】放手型家長：完全信賴教師，正面配合，讓教師全權處理。積極型=主動參與；嚴苛型=要求高可能挑剔；冷漠型=不關心不參與。答案選C。"},
+  {id:60,group:"第五組 親師溝通",q:"關於親師衝突的議題，下列敘述何者是最適當的？",opts:["親師溝通時教師必須能接納衝突","親師溝通要避免產生衝突","親師衝突將破壞親師關係","親師價值觀上的歧異是導致衝突的主因"],ans:0,keys:["親師衝突","接納衝突","親師溝通","衝突管理"],exp:"【親師衝突的正確認知】衝突是不可避免的，教師應具備接納衝突的態度與能力，並將其視為解決問題的機會，而非視衝突為破壞性事件或刻意迴避。答案選A。"},
+  {id:61,group:"第五組 親師溝通",q:"下列有關親師衝突的認知何者正確？",opts:["親師衝突是可能發生的事件，教師應發揮專業素養及時處理","親師衝突會造成敵意，應依家長的意見行事，避免衝突擴大","親師衝突代表教師的教學或管教方式有問題，應該立即檢討改進","教師只要公平對待每位學生，家長就會支持，不會發生親師衝突"],ans:0,keys:["親師衝突","專業素養","衝突處理","正確認知"],exp:"【親師衝突正確認知】親師衝突是教育現場可能發生的正常現象，教師應以專業素養積極處理，而非迴避、妥協或自責。答案選A。"},
+  {id:62,group:"第五組 親師溝通",q:"下列何者是杏仁核為大腦情緒反應中心的主要功能？",opts:["提升正向情緒","負面的情緒學習","競爭力和攻擊性","憂鬱和衝動"],ans:1,keys:["杏仁核","amygdala","情緒","負面情緒","大腦"],exp:"【杏仁核（Amygdala）】杏仁核是大腦情緒處理的核心，尤其專司負面情緒的學習與記憶（恐懼、威脅偵測），在「戰或逃」反應中扮演關鍵角色。答案選B。"},
+  {id:63,group:"第五組 親師溝通",q:"安婷能與不同背景的同學有效溝通，傾聽他人意見、協調分工並解決衝突，積極維護合作關係。安婷主要展現了社會情緒學習（SEL）中哪一種核心能力？",opts:["自我覺察","自我管理","人際技巧","社會覺察"],ans:2,keys:["SEL","社會情緒學習","人際技巧","relationship skills","CASEL"],exp:"【SEL五大核心能力—CASEL】①自我覺察②自我管理③社會覺察④人際技巧（Relationship Skills）⑤負責任的決策。安婷：有效溝通、傾聽、協調、解決衝突=人際技巧。答案選C。"},
+  {id:64,group:"第五組 親師溝通",q:"社會情緒學習（SEL）是生命教育的重要課題。下列輔導老師問話與SEL核心能力之相對應，何者為非？",opts:["「我想了解你動手當下怎麼了？...我聽到你最在意的是你的自尊受傷」=增進自我覺察能力","「聽說你打人了...如果可以重來，你覺得怎麼做可以避免這種不舒服？」=協助發展人際技巧能力","「你認為那只是一個玩笑，可是小美很難過...你是怎麼想的？」=幫助增進社會覺察能力","「你曾對其他同學做過同樣的事情...你怎麼評估確定每一個人都不會因你這樣做而受傷？」=引導建立自我管理能力"],ans:3,keys:["SEL","社會情緒學習","核心能力","對應"],exp:"【SEL核心能力對應辨析】選項D的問話（評估自己行為對他人的影響）實際上對應的是「負責任的決策」，而非「自我管理」。自我管理=管理自己的情緒與行為。答案選D（此項對應有誤）。"},
+  {id:65,group:"第五組 親師溝通",q:"教師讚美學生時應使用鑑賞式評價（appreciative praise），下列何者不屬於鑑賞式評價？",opts:["你幫忙大掃除，讓教室煥然一新","你主動幫助同學，真是個好孩子","你見義勇為，讓小偷接受法律的制裁","你能拾金不昧，讓失主能夠解決燃眉之急"],ans:1,keys:["鑑賞式評價","appreciative praise","稱讚","評價式"],exp:"【鑑賞式評價 vs 評價式評價】鑑賞式：描述行為帶來的具體影響和貢獻；評價式：對人格/品質做評斷。B「真是個好孩子」=評價式，非鑑賞式。答案選B。"},
+  {id:66,group:"第五組 親師溝通",q:"老師聽完小穎彈琴後，對她說：「妳的琴藝進步不少，應該花了很多時間練習。」此較屬於哪一種稱讚的方式？",opts:["鑑賞式稱讚","評價式稱讚","三明治效應稱讚","迂迴溝通術稱讚"],ans:0,keys:["鑑賞式稱讚","努力歸因","稱讚方式"],exp:"【鑑賞式稱讚（Appreciative Praise）】描述具體行為成果（琴藝進步）並歸因於努力（花了很多時間練習），而非評斷人格特質。答案選A。"},
+  {id:67,group:"第五組 親師溝通",q:"下列何者屬於「我－訊息」（I-MESSAGE）？",opts:["你總是缺交作業，屢勸不聽，我不知道該怎麼辦！","你怎麼又缺交作業了！這次又是什麼理由呢？","你經常缺交作業，我沒有辦法了解你的學習情形，讓我很困擾！","我為你的缺交作業想過很多辦法，但你還是缺交，我已經無法可想了！"],ans:2,keys:["我訊息","I-message","Gordon","高登","溝通技巧"],exp:"【我訊息（I-Message）—Gordon】三要素：①描述行為（非指責）②說明對自己的具體影響③表達感受。C：「你經常缺交作業」（行為）+「我沒有辦法了解你的學習情形」（影響）+「讓我很困擾」（感受）。答案選C。"},
+  {id:68,group:"第五組 親師溝通",q:"小明上課愛玩玩具，又屢勸不聽。如果老師運用「我－訊息」策略，會對小明說什麼？",opts:["小明，你上課一再玩玩具，實在很差勁！","小明，你下次再玩玩具，我就沒收不還你了！","小明，你上課玩玩具，影響我上課，我很生氣！","小明，你為什麼不聽話？叫你上課不要玩玩具你偏要玩！"],ans:2,keys:["我訊息","I-message","上課玩玩具"],exp:"【我訊息應用】C：「你上課玩玩具」（描述行為）+「影響我上課」（具體影響）+「我很生氣」（感受）=正確的我訊息三要素。A=人身攻擊；B=威脅；D=責備質問。答案選C。"},
+  {id:69,group:"第五組 親師溝通",q:"大明幫父母賣衣服到凌晨才休息，因此上學常遲到。盧老師要如何運用三明治技術與其家長溝通？",opts:["先說大明上學遲到的事實，再提出他在校的優良表現，最後說明老師的期望","先說大明在校的優良表現，再提出他上學遲到的事實，最後說大明是位貼心的學生","先說大明上學遲到的事實，再提出請家長讓他提早回家休息，最後說明學校的規定","先說大明上課精神不濟的事實，再提出學校的規定，最後說明輔導室對大明的輔導措施"],ans:1,keys:["三明治技術","sandwich technique","親師溝通","正面開頭結尾"],exp:"【三明治技術】結構：正面→問題→正面。B：「在校優良表現」（正面）→「上學遲到」（問題）→「貼心的學生」（正面結尾）。讓家長在接受批評的同時感受到尊重，減少防衛心。答案選B。"},
+  {id:70,group:"第六組 數位時代的班級經營",q:"王老師出於善意跟大家介紹：「小凱因為父親有家暴行為，父母離異後由外公照料，轉學到班上，請大家要多關心他」。王老師最可能違反下列何種學生輔導工作倫理守則？",opts:["隱私權","公正對待","知後同意","預警責任"],ans:0,keys:["隱私權","保密","倫理","個資保護"],exp:"【輔導倫理—隱私權】未經當事人同意，公開學生的家庭隱私（家暴、離婚、監護人）嚴重侵犯學生隱私權。即使出於善意也違反保密倫理原則。答案選A。"},
+  {id:71,group:"第六組 數位時代的班級經營",q:"李老師在學生出現作業缺交、干擾上課秩序等行為問題時，會登記缺點，一週累積達五次以上就需接受懲罰，若當週未被記缺點可累積加分，期末可換嘉獎或小禮物。李老師運用下列哪些原理？甲、古典制約；乙、操作制約；丙、生理回饋；丁、代幣制度",opts:["甲乙","丙丁","甲丙","乙丁"],ans:3,keys:["操作制約","代幣制度","增強","行為管理"],exp:"【行為管理原理辨析】乙—操作制約：以後果（加分/懲罰）影響行為；丁—代幣制度：累積加分換嘉獎/禮物=以代幣換實質獎勵。古典制約=巴夫洛夫，不適用；生理回饋，不適用。答案選D（乙丁）。"},
+  {id:72,group:"第六組 數位時代的班級經營",q:"老師告訴小文：「你之前曾有幾次考得很好，所以你認為沒考好代表能力很差的想法不正確！」這是運用認知行為治療的哪一種技術？",opts:["家庭作業","系統減敏","奇蹟問句","認知駁斥"],ans:3,keys:["認知駁斥","認知行為治療","CBT","REBT","非理性信念"],exp:"【認知行為治療—認知駁斥（Cognitive Disputing）】以具體反例（「你之前曾考得很好」）挑戰學生的過度概化/非理性信念（「沒考好=能力差」）。答案選D。"},
+  {id:73,group:"第六組 數位時代的班級經營",q:"導師決定使用五個步驟對小布的行為進行塑造，請選出正確的順序。甲、行為塑造；乙、評估效果；丙、選擇適當增強物；丁、測定行為的基準線；戊、確定目標行為與終點行為",opts:["甲乙丙丁戊","戊丁乙甲丙","戊丁丙甲乙","丁甲丙戊乙"],ans:2,keys:["行為塑造","基準線","增強物","目標行為","行為改變技術"],exp:"【行為塑造五步驟（正確順序）】①戊—確定目標行為與終點行為②丁—測定行為的基準線③丙—選擇適當增強物④甲—行為塑造（執行）⑤乙—評估效果。答案選C（戊丁丙甲乙）。"},
+  {id:74,group:"第六組 數位時代的班級經營",q:"林老師因為小強上課時頻頻與鄰座的小泰講話，因此叫兩人站立反省，讓其他同學引以為戒。上述現象與下列何種效應最相關？",opts:["月暈效應","漣漪效應","馬太效應","蝴蝶效應"],ans:1,keys:["漣漪效應","ripple effect","Kounin","班級管理","引以為戒"],exp:"【漣漪效應（Ripple Effect）—Kounin】當教師處理某一學生的不當行為時，會對其他旁觀學生產生「漣漪」影響，使其也收斂行為。「讓其他同學引以為戒」=漣漪效應。答案選B。"},
+  {id:75,group:"第六組 數位時代的班級經營",q:"某國小推動「資訊融入教學」，下列何者最符合其核心意涵？",opts:["成立資訊社團","增加電腦設備數量","開設資訊課程","結合資訊科技完成學習任務"],ans:3,keys:["資訊融入教學","科技融入","學習任務","ICT"],exp:"【資訊融入教學的核心意涵】「融入」指的是將資訊科技整合進各學科的學習活動中，以科技作為達成學習目標的工具，而非獨立設置資訊課程或單純增加設備。答案選D。"},
+  {id:76,group:"第六組 數位時代的班級經營",q:"教師使用數位平台進行點名、作業繳交與即時回饋，最符合何種班級經營概念？",opts:["傳統教學","行政管理分離","科技化班級經營","放任式管理"],ans:2,keys:["科技化班級經營","數位平台","即時回饋"],exp:"【科技化班級經營】運用數位平台執行班級管理事務（點名、繳交作業、即時回饋）=科技化班級經營的典型應用。答案選C。"},
+  {id:77,group:"第六組 數位時代的班級經營",q:"教師利用APP與學生及家長進行即時溝通，最符合下列何種理念？",opts:["單向教學","控制式管理","雙向互動","放任自由"],ans:2,keys:["雙向互動","APP","即時溝通","親師溝通"],exp:"【雙向互動溝通理念】透過APP進行即時溝通，師生與家長都可以發訊息、回應，打破單向傳遞的限制，體現雙向互動的溝通理念。答案選C。"},
+  {id:78,group:"第六組 數位時代的班級經營",q:"教師透過學習平台分析學生學習紀錄並調整教學策略，屬於何種概念？",opts:["經驗導向","直覺教學","數據導向班級經營","行為放任"],ans:2,keys:["數據導向","學習分析","learning analytics","教學調整"],exp:"【數據導向班級經營】根據學習平台收集的數據（學習紀錄、作答表現）進行分析，以數據為依據調整教學策略。答案選C。"},
+  {id:79,group:"第六組 數位時代的班級經營",q:"下列何者最符合科技化班級經營特徵？",opts:["教師單向講解","學生被動接受","即時回饋與互動","強調記憶"],ans:2,keys:["科技化班級經營","即時回饋","互動"],exp:"【科技化班級經營的核心特徵】強調：即時性（real-time feedback）、互動性（學生可主動參與回應）、個別化（依學習數據調整）。答案選C。"},
+  {id:80,group:"第六組 數位時代的班級經營",q:"電腦化測驗用於班級經營時，其最大優勢為何？",opts:["減少題目數","提供即時回饋與分析","取代教師","降低學習動機"],ans:1,keys:["電腦化測驗","CBT","即時回饋","學習分析","數位評量"],exp:"【電腦化測驗（CBT）的最大優勢】即時回饋：學生答完後立即得到成績與分析，教師也能即時掌握班級學習狀況，據以調整教學。這是紙筆測驗無法即時做到的最大優勢。答案選B。"},
+];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  currentQuestions: [],
+  currentIndex: 0,
+  score: 0,
+  sessionWrong: [],
+  answered: false,
+  retryGroup: null,
+};
+
+function loadWrongIds() {
+  try { return new Set(JSON.parse(localStorage.getItem('wrong_ids') || '[]')); }
+  catch(e) { return new Set(); }
+}
+function saveWrongIds(set) {
+  localStorage.setItem('wrong_ids', JSON.stringify([...set]));
+}
+function addWrong(id) {
+  const s = loadWrongIds(); s.add(id); saveWrongIds(s);
+}
+function removeWrong(id) {
+  const s = loadWrongIds(); s.delete(id); saveWrongIds(s);
+}
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome() { showScreen('home'); }
+
+// ══════════════════════════════════════════
+// GROUP SELECT
+// ══════════════════════════════════════════
+const GROUPS = [
+  {label:'全部題目 (80題)', count:80, filter:null},
+  {label:'第一組 常規技巧', count:11, filter:'第一組 常規技巧'},
+  {label:'第二組 違規處置', count:23, filter:'第二組 違規處置'},
+  {label:'第三組 偏差行為輔導(1)', count:14, filter:'第三組 偏差行為的案例處置與輔導派典(1)'},
+  {label:'第四組 偏差行為輔導(2)', count:8, filter:'第四組 偏差行為的案例處置與輔導派典(2)'},
+  {label:'第五組 親師溝通', count:13, filter:'第五組 親師溝通'},
+  {label:'第六組 數位時代班級經營', count:11, filter:'第六組 數位時代的班級經營'},
+];
+
+function showGroupSelect() {
+  const grid = document.getElementById('group-grid');
+  grid.innerHTML = '';
+  GROUPS.forEach((g,i) => {
+    const div = document.createElement('div');
+    div.className = 'group-card' + (i===0?' all':'');
+    div.innerHTML = `<div>${g.label}</div><div class="count">${g.count} 題</div>`;
+    div.onclick = () => startQuiz(g.filter);
+    grid.appendChild(div);
+  });
+  showScreen('group-select');
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function startQuiz(groupFilter) {
+  let qs = groupFilter ? QUESTIONS.filter(q=>q.group===groupFilter) : [...QUESTIONS];
+  qs = shuffle(qs);
+  state.currentQuestions = qs;
+  state.currentIndex = 0;
+  state.score = 0;
+  state.sessionWrong = [];
+  state.answered = false;
+  state.retryGroup = groupFilter;
+  showScreen('quiz');
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = state.currentQuestions[state.currentIndex];
+  const total = state.currentQuestions.length;
+  const idx = state.currentIndex;
+
+  document.getElementById('quiz-group-name').textContent = q.group;
+  document.getElementById('quiz-score-text').textContent = `✅ ${state.score}/${idx}`;
+  document.getElementById('progress-fill').style.width = `${(idx/total)*100}%`;
+  document.getElementById('question-num').textContent = `第 ${idx+1} 題 / 共 ${total} 題  （題號 Q${q.id}）`;
+  document.getElementById('question-text').textContent = q.q;
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = `${['Ａ','Ｂ','Ｃ','Ｄ'][i]}．${opt}`;
+    btn.onclick = () => selectAnswer(i);
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('exp-content').textContent = '';
+  document.getElementById('btn-next').style.display = 'none';
+  state.answered = false;
+}
+
+function selectAnswer(chosen) {
+  if(state.answered) return;
+  state.answered = true;
+
+  const q = state.currentQuestions[state.currentIndex];
+  const btns = document.querySelectorAll('.opt-btn');
+
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if(i === q.ans) btn.classList.add('correct');
+    else if(i === chosen) btn.classList.add('wrong');
+  });
+
+  if(chosen === q.ans) {
+    state.score++;
+    removeWrong(q.id);
+  } else {
+    state.sessionWrong.push(q.id);
+    addWrong(q.id);
+  }
+
+  document.getElementById('exp-content').textContent = q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('btn-next').style.display = 'block';
+  document.getElementById('btn-next').textContent =
+    state.currentIndex + 1 < state.currentQuestions.length ? '下一題 →' : '查看結果 🎉';
+}
+
+function nextQuestion() {
+  state.currentIndex++;
+  if(state.currentIndex < state.currentQuestions.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+}
+
+// ══════════════════════════════════════════
+// RESULT
+// ══════════════════════════════════════════
+function showResult() {
+  const total = state.currentQuestions.length;
+  const score = state.score;
+  const pct = score/total;
+  let emoji, msg;
+  if(pct>=0.9){emoji='🌸';msg='超厲害！皮克敏之王！';}
+  else if(pct>=0.8){emoji='🌻';msg='很棒！再衝一下滿分！';}
+  else if(pct>=0.6){emoji='🌱';msg='不錯喔！繼續加油！';}
+  else{emoji='🥕';msg='多複習錯題，你一定可以！';}
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-score').textContent = `${score}`;
+  document.getElementById('result-total').textContent = `/ ${total} 題`;
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('btn-retry').onclick = retryQuiz;
+
+  const wrongCount = loadWrongIds().size;
+  document.querySelector('#result .btn-wrong').textContent = `❌ 複習錯題（共 ${wrongCount} 題）`;
+  showScreen('result');
+}
+
+function retryQuiz() {
+  startQuiz(state.retryGroup);
+}
+
+// ══════════════════════════════════════════
+// WRONG REVIEW
+// ══════════════════════════════════════════
+function showWrongReview() {
+  const wrongIds = loadWrongIds();
+  const wrongQs = QUESTIONS.filter(q => wrongIds.has(q.id));
+  const list = document.getElementById('wrong-list');
+  list.innerHTML = '';
+
+  if(wrongQs.length === 0) {
+    list.innerHTML = '<div class="wrong-empty">🎉 目前沒有錯題！<br>繼續保持！</div>';
+    showScreen('wrong-review');
+    return;
+  }
+
+  const clearBtn = document.createElement('button');
+  clearBtn.className = 'clear-wrong-btn';
+  clearBtn.textContent = `🗑 清除全部錯題記錄（共 ${wrongQs.length} 題）`;
+  clearBtn.onclick = () => { saveWrongIds(new Set()); showWrongReview(); };
+  list.appendChild(clearBtn);
+
+  wrongQs.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    card.innerHTML = `
+      <div class="review-num">Q${q.id} · ${q.group}</div>
+      <div class="review-q">${q.q}</div>
+      <div class="review-ans">✅ 正確答案：${['Ａ','Ｂ','Ｃ','Ｄ'][q.ans]}．${q.opts[q.ans]}</div>
+      <div class="review-exp">${q.exp}</div>
+    `;
+    list.appendChild(card);
+  });
+
+  showScreen('wrong-review');
+}
+
+// ══════════════════════════════════════════
+// SEARCH
+// ══════════════════════════════════════════
+function showSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').innerHTML = '<div class="search-empty">輸入關鍵字開始搜尋<br>例如：Dreikurs、海馬迴、三明治</div>';
+  showScreen('search');
+  setTimeout(()=>document.getElementById('search-input').focus(), 300);
+}
+
+function doSearch() {
+  const q = document.getElementById('search-input').value.trim();
+  const results = document.getElementById('search-results');
+  if(!q) { results.innerHTML = '<div class="search-empty">請輸入關鍵字</div>'; return; }
+
+  const lower = q.toLowerCase();
+  const matched = QUESTIONS.filter(item => {
+    const text = (item.q + item.exp + item.keys.join(' ') + item.opts.join(' ')).toLowerCase();
+    return text.includes(lower);
+  });
+
+  if(matched.length === 0) {
+    results.innerHTML = `<div class="search-empty">找不到「${q}」相關題目</div>`;
+    return;
+  }
+
+  results.innerHTML = `<div style="color:#888;font-size:15px;margin-bottom:10px">找到 ${matched.length} 題</div>`;
+  matched.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'search-result-card';
+    const tags = item.keys.slice(0,5).map(k=>`<span class="tag">${k}</span>`).join('');
+    card.innerHTML = `
+      <div class="src-num">Q${item.id} · ${item.group}</div>
+      <div class="src-q">${item.q}</div>
+      <div class="src-ans">✅ ${['Ａ','Ｂ','Ｃ','Ｄ'][item.ans]}．${item.opts[item.ans]}</div>
+      <div style="font-size:15px;color:#555;line-height:1.6;margin-bottom:6px">${item.exp}</div>
+      <div class="src-keys">${tags}</div>
+    `;
+    results.appendChild(card);
+  });
+}
+</script>
+</body>
+</html>
